@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: #0d0d0d;
+  --foreground: #d4d4d4;
+  --font-size-base: 0.9375rem;
+  --font-weight-base: 400;
+  --h1-size: 2.5rem;
+  --h2-size: 0.875rem;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: 'JetBrains Mono', ui-monospace, monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* no light-mode flip — this theme is dark by design, not by system preference */
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-base);
+  line-height: 1.5;
+}
+
+/* terminal utility classes (replacing the old amatic-sc-* helpers) */
+.term-regular {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-style: normal;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.term-bold {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-style: normal;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* kept for backwards-compat with old class names, now mapped to mono */
+.amatic-sc-regular,
+.amatic-sc,
+.amatic-sc-700,
+.amatic-sc-bold {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* apply mono site-wide so nothing slips back to a system sans */
+h1, h2, h3, h4, h5, h6, p, li, a, button, input, textarea, pre, code {
+  font-family: var(--font-mono);
+}
+
+h1 {
+  font-size: var(--h1-size);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: var(--h2-size);
+  font-weight: 400;
+  line-height: 1.4;
+  text-transform: lowercase;
+}
+
+strong,
+b {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-style: normal;
+}
+
+em,
+i {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* selection + scrollbar, small raw touches rather than polish */
+::selection {
+  background: #3a5f3a;
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border: 2px solid #0d0d0d;
+}
