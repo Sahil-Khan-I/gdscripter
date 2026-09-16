@@ -8,12 +8,12 @@ import ThemeToggle from "./ThemeToggle";
 import { canAccessBuilds, getProgress, levelFromXp } from "../lib/progress";
 
 const LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/learn", label: "Path" },
-  { href: "/lab", label: "Lab" },
-  { href: "/play", label: "Play" },
-  { href: "/cards", label: "Cards" },
-  { href: "/build", label: "Build", needsLevel2: true },
+  { href: "/", label: "Home", tip: "Base camp" },
+  { href: "/learn", label: "Path", tip: "The map" },
+  { href: "/lab", label: "Lab", tip: "Move sprites" },
+  { href: "/play", label: "Play", tip: "XP farm" },
+  { href: "/cards", label: "Cards", tip: "Brain reps" },
+  { href: "/build", label: "Build", tip: "Boss zone", needsLevel2: true },
 ];
 
 export default function Nav() {
@@ -39,21 +39,19 @@ export default function Nav() {
 
   return (
     <div className="nav-shell sticky top-0 z-50 px-2 sm:px-3 pt-2 sm:pt-3">
-      <header className={`nav-glass-pill mx-auto max-w-5xl ${open ? "!rounded-2xl" : ""}`}>
-        <div className="flex items-center gap-2 px-2.5 sm:px-3 h-11 sm:h-12">
-          <Link
-            href="/"
-            className="font-black text-sm sm:text-base tracking-tight text-ink no-underline flex items-center gap-1.5 shrink-0"
-          >
-            <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-coral text-white text-[11px] border-2 border-ink">
+      <header className={`nav-glass-pill mx-auto max-w-5xl ${open ? "nav-open" : ""}`}>
+        <div className="nav-row">
+          <Link href="/" className="nav-brand" title="GDScripter">
+            <span className="nav-logo" aria-hidden>
+              <span className="nav-logo-ear" />
               GD
             </span>
-            <span className="hidden sm:inline">
+            <span className="nav-brand-text">
               <span className="text-coral">GD</span>Scripter
             </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-0.5 flex-1 justify-center">
+          <nav className="nav-links">
             {LINKS.map((l) => {
               const active =
                 l.href === "/" ? pathname === "/" : pathname.startsWith(l.href);
@@ -62,28 +60,26 @@ export default function Nav() {
                 <Link
                   key={l.href}
                   href={locked ? "/build" : l.href}
-                  className={`px-2.5 py-1 rounded-full text-xs font-extrabold no-underline transition-colors ${
-                    active
-                      ? "bg-ink text-white"
-                      : "text-ink-soft hover:bg-[color-mix(in_srgb,var(--surface)_70%,transparent)] hover:text-ink"
-                  }`}
+                  className={`nav-link ${active ? "is-active" : ""} ${locked ? "is-locked" : ""}`}
+                  title={locked ? `Lv2 lock · you're Lv${level}` : l.tip}
                 >
                   {l.label}
-                  {locked ? "·" : ""}
+                  {locked ? <span className="nav-lock">🔒</span> : null}
                 </Link>
               );
             })}
           </nav>
 
-          <div className="flex items-center gap-1.5 ml-auto">
-            <div className="hidden md:block scale-90 origin-right">
+          <div className="nav-right">
+            <div className="nav-xp">
               <XpBar compact />
             </div>
             <ThemeToggle />
             <button
               type="button"
-              className="lg:hidden inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-ink bg-[color-mix(in_srgb,var(--surface)_55%,transparent)] text-sm font-black"
+              className="nav-burger"
               aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
             >
               {open ? "✕" : "☰"}
@@ -92,8 +88,8 @@ export default function Nav() {
         </div>
 
         {open && (
-          <nav className="lg:hidden border-t border-[color-mix(in_srgb,var(--ink)_12%,transparent)] px-2 py-2 flex flex-col gap-1 anim-pop">
-            <div className="md:hidden px-1 pb-2">
+          <nav className="nav-mobile anim-pop">
+            <div className="nav-mobile-xp">
               <XpBar compact />
             </div>
             {LINKS.map((l) => {
@@ -104,20 +100,18 @@ export default function Nav() {
                 <Link
                   key={l.href}
                   href={locked ? "/build" : l.href}
-                  className={`px-3 py-2 rounded-xl text-sm font-extrabold no-underline ${
-                    active ? "bg-ink text-white" : "bg-[color-mix(in_srgb,var(--surface)_50%,transparent)] text-ink"
-                  }`}
+                  className={`nav-mobile-link ${active ? "is-active" : ""}`}
                 >
-                  {l.label}
-                  {locked ? ` · Lv2 (you: ${level})` : ""}
+                  <span>{l.label}</span>
+                  <span className="nav-mobile-tip">
+                    {locked ? `Lv2 lock (you: ${level})` : l.tip}
+                  </span>
                 </Link>
               );
             })}
-            <Link
-              href="/contribute"
-              className="px-3 py-2 rounded-xl text-sm font-extrabold no-underline text-ink-soft"
-            >
-              Contribute
+            <Link href="/contribute" className="nav-mobile-link">
+              <span>Contribute</span>
+              <span className="nav-mobile-tip">Ship a PR</span>
             </Link>
           </nav>
         )}

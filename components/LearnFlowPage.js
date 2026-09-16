@@ -2,14 +2,10 @@
 
 import Link from "next/link";
 import { LEARN_FLOW, LEARN_SECTIONS } from "../lib/learn-path";
-
-const colorChip = {
-  coral: "bg-coral text-white",
-  gold: "bg-gold text-ink",
-  teal: "bg-teal text-white",
-  sky: "bg-sky text-ink",
-  mint: "bg-mint text-ink",
-};
+import PipelineFlow from "./graphs/PipelineFlow";
+import SkillTree from "./graphs/SkillTree";
+import SceneTreeGraph from "./graphs/SceneTreeGraph";
+import DecisionFlow from "./graphs/DecisionFlow";
 
 export default function LearnFlowPage() {
   return (
@@ -18,38 +14,23 @@ export default function LearnFlowPage() {
         <p className="chip bg-gold mb-3">Roadmap</p>
         <h1 className="text-3xl sm:text-4xl font-black mb-2">Learning path</h1>
         <p className="font-bold text-ink-soft max-w-2xl text-sm sm:text-base mb-2">
-          From integers to 3D — one flowchart, simplified docs, and practice links.
-          Skip ahead if you want; just don&apos;t pretend Vector3 makes sense before
-          Vector2.
+          Real flowcharts — pipelines, skill trees, scene trees — not a wall of
+          boxes. Click nodes to jump into docs or practice.
         </p>
         <p className="font-extrabold text-coral text-sm italic">
-          This is the map. Play / Lab / Build are the gym.
+          Follow the arrows. Or ignore them and get roasted by Byte later.
         </p>
       </header>
 
-      {/* Flowchart */}
-      <section className="mb-12 overflow-x-auto pb-2">
-        <h2 className="font-black text-xl mb-4">Flowchart</h2>
-        <div className="flow-track min-w-[640px] sm:min-w-0">
-          {LEARN_FLOW.map((node, i) => (
-            <div key={node.id} className="flow-node-wrap">
-              {i > 0 && <div className="flow-arrow" aria-hidden />}
-              <Link
-                href={node.href}
-                className="flow-node panel no-underline text-ink block hover:-translate-y-0.5 transition-transform"
-              >
-                <span className={`chip mb-2 ${colorChip[node.color]}`}>
-                  {node.emoji}. {node.title}
-                </span>
-                <p className="text-xs font-bold text-ink-soft m-0 mb-2">{node.blurb}</p>
-                <span className="text-xs font-extrabold text-coral">
-                  Practice → {node.practice.replace(/^\//, "")}
-                </span>
-              </Link>
-            </div>
-          ))}
+      <section className="mb-10 space-y-6">
+        <h2 className="font-black text-xl m-0">Maps</h2>
+        <PipelineFlow />
+        <SkillTree />
+        <div className="grid lg:grid-cols-2 gap-6">
+          <DecisionFlow />
+          <SceneTreeGraph />
         </div>
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           <Link href="/lab" className="btn-arcade btn-coral !py-2 !text-sm">
             Open Sprite Lab
           </Link>
@@ -62,7 +43,21 @@ export default function LearnFlowPage() {
         </div>
       </section>
 
-      {/* Docs */}
+      <section className="mb-8">
+        <h2 className="font-black text-xl mb-3">Chapter list</h2>
+        <div className="chapter-rail">
+          {LEARN_FLOW.map((node, i) => (
+            <div key={node.id} className="chapter-rail-item">
+              {i > 0 && <span className="chapter-rail-line" aria-hidden />}
+              <Link href={node.href} className="chapter-rail-node">
+                <span className="chapter-rail-idx">{node.emoji}</span>
+                <span className="chapter-rail-label">{node.title}</span>
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="space-y-8">
         {LEARN_SECTIONS.map((sec) => (
           <article key={sec.id} id={sec.id} className="scroll-mt-28">
@@ -75,7 +70,9 @@ export default function LearnFlowPage() {
                   {b.p && (
                     <p className="font-bold text-ink-soft text-sm m-0 mb-2">{b.p}</p>
                   )}
-                  {b.code && <pre className="code-block whitespace-pre-wrap m-0">{b.code}</pre>}
+                  {b.code && (
+                    <pre className="code-block whitespace-pre-wrap m-0">{b.code}</pre>
+                  )}
                 </div>
               ))}
             </div>
@@ -83,7 +80,10 @@ export default function LearnFlowPage() {
               <Link
                 href={
                   LEARN_FLOW.find(
-                    (f) => f.id === sec.id || sec.id.includes(f.id) || f.id.includes(sec.id.replace("gamedev", "")),
+                    (f) =>
+                      f.id === sec.id ||
+                      `gamedev${f.id}` === sec.id ||
+                      sec.id.endsWith(f.id),
                   )?.practice || "/cards"
                 }
                 className="font-extrabold text-sm text-coral no-underline hover:underline"

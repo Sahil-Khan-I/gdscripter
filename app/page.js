@@ -1,16 +1,55 @@
 import Link from "next/link";
 import PathPicker from "../components/PathPicker";
+import RoboDog from "../components/RoboDog";
+import PipelineFlow from "../components/graphs/PipelineFlow";
 import { FLASHCARDS } from "../lib/flashcards";
 import { GAME_STATS } from "../lib/game-data";
 
 const TOPICS = [
-  { title: "Variables & types", detail: "var, const, typing, enums, strings" },
-  { title: "Functions & lifecycle", detail: "_ready, _process, physics step, returns" },
-  { title: "Signals & await", detail: "connect, emit, timers, animation waits" },
-  { title: "Nodes & scenes", detail: "$ paths, @onready, groups, instantiate" },
-  { title: "Data & control flow", detail: "Arrays, Dictionaries, match, loops" },
-  { title: "Movement & input", detail: "delta, CharacterBody2D, Input Map" },
+  {
+    title: "Variables & types",
+    detail: "var, const, typing, enums, strings",
+    href: "/learn#syntax",
+    accent: "coral",
+    n: "01",
+  },
+  {
+    title: "Functions & lifecycle",
+    detail: "_ready, _process, physics step, returns",
+    href: "/learn#functions",
+    accent: "teal",
+    n: "02",
+  },
+  {
+    title: "Signals & await",
+    detail: "connect, emit, timers, animation waits",
+    href: "/learn#signals",
+    accent: "gold",
+    n: "03",
+  },
+  {
+    title: "Nodes & scenes",
+    detail: "$ paths, @onready, groups, instantiate",
+    href: "/learn#nodes",
+    accent: "sky",
+    n: "04",
+  },
+  {
+    title: "Data & control flow",
+    detail: "Arrays, Dictionaries, match, loops",
+    href: "/learn#control",
+    accent: "mint",
+    n: "05",
+  },
+  {
+    title: "Movement & 3D",
+    detail: "delta, CharacterBody2D/3D, Input Map",
+    href: "/learn#gamedev3d",
+    accent: "coral",
+    n: "06",
+  },
 ];
+
 
 const HOW = [
   {
@@ -43,7 +82,7 @@ export default function Home() {
           aria-hidden
         >
           <div
-            className="anim-float absolute -right-6 top-14 h-44 w-44 rounded-[2.2rem] bg-coral border-[3px] border-ink shadow-[6px_6px_0_#16162a] max-sm:h-28 max-sm:w-28"
+            className="anim-float absolute -right-6 top-14 h-44 w-44 rounded-[2.2rem] bg-coral border-[3px] border-ink shadow-[6px_6px_0_var(--ink)] max-sm:h-28 max-sm:w-28"
             style={{ "--rot": "12deg" }}
           />
           <div
@@ -51,7 +90,7 @@ export default function Home() {
             style={{ animationDelay: "0.5s" }}
           />
           <div
-            className="anim-float absolute right-8 bottom-24 h-32 w-32 rounded-3xl bg-gold border-[3px] border-ink shadow-[5px_5px_0_#16162a] max-sm:h-20 max-sm:w-20 max-sm:bottom-10"
+            className="anim-float absolute right-8 bottom-24 h-32 w-32 rounded-3xl bg-gold border-[3px] border-ink shadow-[5px_5px_0_var(--ink)] max-sm:h-20 max-sm:w-20 max-sm:bottom-10"
             style={{ animationDelay: "1s", "--rot": "-8deg" }}
           />
           <div className="absolute -left-10 bottom-16 h-40 w-40 rounded-full bg-sky/80 border-[3px] border-ink opacity-90 max-sm:h-24 max-sm:w-24" />
@@ -61,8 +100,8 @@ export default function Home() {
           <div className="anim-bounce-in max-w-2xl">
             <div className="flex flex-wrap gap-2 mb-5">
               <span className="chip bg-gold">Godot 4</span>
-              <span className="chip bg-[#D8FFF6]">Open source</span>
-              <span className="chip bg-[#FFE0EC]">Competitive learning</span>
+              <span className="chip bg-[color-mix(in_srgb,var(--teal)_35%,var(--surface))]">Open source</span>
+              <span className="chip bg-[color-mix(in_srgb,var(--coral)_28%,var(--surface))]">Byte approved</span>
             </div>
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[0.95] tracking-tight text-ink mb-4">
               <span className="text-coral">GD</span>Scripter
@@ -90,17 +129,19 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex flex-wrap gap-2 sm:gap-3 text-sm font-extrabold">
-              <span className="chip bg-white">{cardCount}+ cards</span>
-              <span className="chip bg-white">{challengeCount}+ challenges</span>
-              <span className="chip bg-white">2 build tutorials</span>
+              <span className="chip bg-surface">{cardCount}+ cards</span>
+              <span className="chip bg-surface">{challengeCount}+ challenges</span>
+              <span className="chip bg-surface">2 build tutorials</span>
             </div>
           </div>
         </div>
       </section>
 
+      <RoboDog />
+
       <PathPicker />
 
-      <section className="border-t-[3px] border-ink bg-surface/80">
+      <section id="how" className="border-t-[3px] border-ink bg-surface/80 scroll-mt-24">
         <div className="mx-auto max-w-5xl px-4 py-12 sm:py-14">
           <h2 className="text-2xl sm:text-3xl font-black mb-2">How it works</h2>
           <p className="font-bold text-ink-soft mb-8 max-w-xl text-sm sm:text-base">
@@ -171,39 +212,61 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-t-[3px] border-ink bg-[#FFF0E3]/70">
-        <div className="mx-auto max-w-5xl px-4 py-12 sm:py-14">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-10 items-start">
+      <section className="learn-section border-t-[3px] border-ink">
+        <div className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-black mb-2">
+              <p className="chip bg-gold mb-3">Curriculum</p>
+              <h2 className="text-2xl sm:text-3xl font-black m-0 mb-2">
                 What you&apos;ll learn
               </h2>
-              <p className="font-bold text-ink-soft mb-6 text-sm sm:text-base">
-                Practical Godot 4 / GDScript — the stuff you type in real projects.
+              <p className="font-bold text-ink-soft m-0 max-w-xl text-sm sm:text-base">
+                From integers to 3D movement — tap a topic to jump into the path docs.
               </p>
-              <ul className="grid sm:grid-cols-2 gap-3 p-0 m-0 list-none">
-                {TOPICS.map((t) => (
-                  <li key={t.title} className="panel p-4">
-                    <p className="font-black m-0 mb-1">{t.title}</p>
-                    <p className="text-sm font-bold text-ink-soft m-0">{t.detail}</p>
-                  </li>
-                ))}
-              </ul>
             </div>
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-black mb-2">
-                A taste of GDScript
-              </h2>
-              <p className="font-bold text-ink-soft mb-4 text-sm sm:text-base">
-                Patterns you&apos;ll meet in Play, Cards, and Build:
+            <Link href="/learn" className="btn-arcade btn-ghost !py-2 !text-sm w-fit">
+              Full flowchart →
+            </Link>
+          </div>
+
+          <div className="mb-8">
+            <PipelineFlow />
+          </div>
+
+          <div className="grid lg:grid-cols-5 gap-6 lg:gap-8 items-start">
+            <ul className="lg:col-span-3 grid sm:grid-cols-2 gap-3 p-0 m-0 list-none">
+              {TOPICS.map((t) => (
+                <li key={t.title}>
+                  <Link
+                    href={t.href}
+                    className={`topic-card topic-${t.accent} no-underline text-ink block`}
+                  >
+                    <span className="topic-num">{t.n}</span>
+                    <span className="topic-title">{t.title}</span>
+                    <span className="topic-detail">{t.detail}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <div className="lg:col-span-2 taste-panel">
+              <div className="taste-header">
+                <span className="chip bg-teal text-white !border-ink">live snippet</span>
+                <span className="taste-file font-mono">player.gd</span>
+              </div>
+              <p className="font-bold text-ink-soft text-sm m-0 mb-3">
+                A pattern you&apos;ll meet in Lab, Play, and Build:
               </p>
-              <pre className="code-block mb-4">{`extends CharacterBody2D
+              <pre className="code-block taste-code m-0 mb-4">{`extends CharacterBody2D
 
 @export var speed := 220.0
 signal died
 
 func _physics_process(delta):
-    var dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+    var dir = Input.get_vector(
+      "ui_left", "ui_right",
+      "ui_up", "ui_down"
+    )
     velocity = dir * speed
     move_and_slide()
 
@@ -212,12 +275,14 @@ func take_hit(amount: int) -> void:
     if health <= 0:
         died.emit()
         queue_free()`}</pre>
-              <Link
-                href="/cards"
-                className="btn-arcade btn-teal btn-arcade-stack sm:!w-auto"
-              >
-                Learn each piece on cards
-              </Link>
+              <div className="flex flex-wrap gap-2">
+                <Link href="/cards" className="btn-arcade btn-teal !py-2 !text-sm">
+                  Drill on cards
+                </Link>
+                <Link href="/lab" className="btn-arcade btn-ghost !py-2 !text-sm">
+                  Try in Lab
+                </Link>
+              </div>
             </div>
           </div>
         </div>
